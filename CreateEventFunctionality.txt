@@ -1,0 +1,37 @@
+package booking.sp.clbooking;
+
+import //add necesary imports here
+
+Event event = new Event()
+
+//Sets date and time
+//datetime must have this form of parameter
+DateTime startDateTime = new DateTime("2017-11-20T00:00:00-5:00"); 
+EventDateTime start = new EventDateTime()
+	.setDateTime(startDateTime)
+event.setStart(start);
+
+DateTime endDateTime = new DateTime("2017-11-20T00:00:00-6:00"); 
+EventDateTime end = new EventDateTime()
+	.setDateTime(endDateTime)
+event.setEnd(end);
+
+//Set attendees
+//Attendees takes an array
+EventAttendee[] attendees = new EventAttendee[] {
+	new EventAttendee().setEmail("email@example.com"), //replace this string
+};
+
+//Sets email notifications up
+EventReminder[] reminderOverrides = new EventReminder[] {
+    new EventReminder().setMethod("email").setMinutes(24 * 60), //don't replace the email string
+};
+Event.Reminders reminders = new Event.Reminders()
+    .setUseDefault(false)
+    .setOverrides(Arrays.asList(reminderOverrides));
+event.setReminders(reminders);
+
+String calendarId = "primary";
+event = service.events().insert(calendarId, event).execute();
+System.out.printf("Event created: %s\n", event.getHtmlLink());
+
